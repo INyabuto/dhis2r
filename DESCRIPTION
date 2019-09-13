@@ -1,0 +1,22 @@
+Package: d2r
+Type: Package
+Title: An R Client for DHIS2 Web API
+Version: 0.1.0
+Author: person("Isaiah","Nyabuto", email = "isaiahnyabuto@gmail.com", role = c("aut","cre"))
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: An R client for integrating DHIS2 web APIs.It makes it really easier
+    to work with with DHIS2 and perform demanding tasks more efficiently. This includes;
+    metadata & data imports, troubleshooting and overal system improvement.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports:
+    jsonlite,
+    httr,
+    keyringr
+Suggests:
+    dplyr,
+    plyr,
+    stringr,
+    tidyr
+RoxygenNote: 6.1.1
