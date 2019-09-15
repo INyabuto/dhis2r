@@ -1,14 +1,24 @@
 #'Login to a DHIS2 instance
 #'
+#'\code{login_dhis2} authenticates the user to a DHIS2 server.
+#'
+#'It uses basic authentication mechanisism to identify the user with an account stored in
+#'the specified DHIS2 server. Basic authentication is a technique for clients to
+#'send login credentials over HTTP to a web server. Technically speaking, the
+#'username is appended with a colon and the password, Base64-encoded, prefixed
+#'Basic and supplied as the value of the Authorization HTTP header
+#'
 #'@param host A string. Server domain name
-#'@return Login details
+#'@param credential_lable A string. Usually the name of your secret file.
+#'@return Login status; success or failed.
 #'@examples
 #'base <- "clone.psi-mis.org"
 #'login_dhis2(base)
-login_dhis2 <- function(host){
+#'@export
+login_dhis2 <- function(host,credential_label){
 
-  usr <- get_kc_account(host, type = "internet")
-  pwd <- decrypt_kc_pw(host, type = "internet")
+  usr <- secrets(host,credential_label)[1]
+  pwd <- secrets(host,credential_label)[2]
 
   path = "api/me"
   url <- modify_url("https://api.github.com", path = path, hostname = host)
@@ -37,7 +47,7 @@ login_dhis2 <- function(host){
 
 
 print.login_dhis2 <- function(x, ...){
-  cat("[DHIS2: ", x$path,"]\n", sep = " ")
+  cat("[Server: ", x$path,"]\n", sep = " ")
   cat("Status: ", x$content, sep = "")
   invisible(x)
 }
@@ -62,7 +72,20 @@ win_secret <- function(cred_label){
   credential_path <- paste(Sys.getenv("USERPROFILE"),
                            '\\DPAPI\\passwords\\',
                            Sys.info()["nodename"],
-                           '\\', credential_label, '.txt', sep="")
+                           '\\', cred_label, '.txt', sep="")
   decrypt_dpapi_pw(credential_path)
 
+}
+
+# Retrieve secrets
+secrets <- function(host,cred_label){
+
+  if (.Platform$OS.type == "windows"){
+    usr <- cred_label
+    pwd <- win_secret(cred_label = cred_label)
+  }else{
+    usr <- get_kc_account(host, type = "internet")
+    pwd <- decrypt_kc_pw(host, type = "internet")
+  }
+   c(usr,pwd)
 }
