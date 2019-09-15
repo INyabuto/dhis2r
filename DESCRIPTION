@@ -1,4 +1,4 @@
-Package: d2r
+Package: dhis2r
 Type: Package
 Title: An R Client for DHIS2 Web API
 Version: 0.1.0
@@ -20,5 +20,5 @@ Suggests:
     stringr,
     tidyr
 RoxygenNote: 6.1.1
-URL: https://github.com/INyabuto/d2r
-BugReports: https://github.com/INyabuto/d2r/issues
+URL: https://github.com/INyabuto/dhis2r
+BugReports: https://github.com/INyabuto/dhis2r/issues

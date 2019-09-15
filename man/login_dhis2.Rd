@@ -7,7 +7,7 @@
 login_dhis2(host)
 }
 \arguments{
-\item{host}{A server domain}
+\item{host}{A string. Server domain name}
 }
 \value{
 Login details
@@ -16,6 +16,6 @@ Login details
 Login to a DHIS2 instance
 }
 \examples{
-base <- "https://clone.psi-mis.org"
+base <- "clone.psi-mis.org"
 login_dhis2(base)
 }
