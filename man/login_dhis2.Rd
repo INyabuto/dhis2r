@@ -4,16 +4,25 @@
 \alias{login_dhis2}
 \title{Login to a DHIS2 instance}
 \usage{
-login_dhis2(host)
+login_dhis2(host, credential_label)
 }
 \arguments{
 \item{host}{A string. Server domain name}
+
+\item{credential_lable}{A string. Usually the name of your secret file.}
 }
 \value{
-Login details
+Login status; success or failed.
 }
 \description{
-Login to a DHIS2 instance
+\code{login_dhis2} authenticates the user to a DHIS2 server.
+}
+\details{
+It uses basic authentication mechanisism to identify the user with an account stored in
+the specified DHIS2 server. Basic authentication is a technique for clients to
+send login credentials over HTTP to a web server. Technically speaking, the
+username is appended with a colon and the password, Base64-encoded, prefixed
+Basic and supplied as the value of the Authorization HTTP header
 }
 \examples{
 base <- "clone.psi-mis.org"
