@@ -4,15 +4,15 @@
 \alias{login_dhis2}
 \title{Login to a DHIS2 instance}
 \usage{
-login_dhis2(host, credential_label)
+login_dhis2(host, credential_label = NULL, naked = FALSE, ...)
 }
 \arguments{
-\item{host}{A string. Server domain name}
+\item{host}{A string, server domain name}
 
-\item{credential_lable}{A string. Usually the name of your secret file.}
+\item{credential_lable}{A string, usually the name of your secret file.}
 }
 \value{
-Login status; success or failed.
+the server domain if a successful authentication is passed.
 }
 \description{
 \code{login_dhis2} authenticates the user to a DHIS2 server.
