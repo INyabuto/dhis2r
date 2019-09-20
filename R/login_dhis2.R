@@ -8,36 +8,46 @@
 #'username is appended with a colon and the password, Base64-encoded, prefixed
 #'Basic and supplied as the value of the Authorization HTTP header
 #'
-#'@param host A string. Server domain name
-#'@param credential_lable A string. Usually the name of your secret file.
-#'@return Login status; success or failed.
+#'@param host A string, server domain name
+#'@param credential_lable A string, usually the name of your secret file.
+#'@return the server domain if a successful authentication is passed.
 #'@examples
 #'base <- "clone.psi-mis.org"
 #'login_dhis2(base)
 #'@export
-login_dhis2 <- function(host,credential_label){
+login_dhis2 <- function(host,credential_label = NULL, naked = FALSE,...){
 
-  usr <- secrets(host,credential_label)[1]
-  pwd <- secrets(host,credential_label)[2]
+  args <- list(...)
 
-  path = "api/me"
-  url <- modify_url("https://api.github.com", path = path, hostname = host)
+  if (naked){
+    if (!("usr" %in% names(args) & "pwd" %in% names(args))){
+      stop("DHIS2 credentials is missing, perhaps dhis2r found no hits? Try specifying the credential label or saving the secrect file", call. = FALSE)
+    }
+    else{
+      usr <- args$usr
+      pwd <- args$pwd
 
-  resp <- GET(url, authenticate(usr, pwd), timeout(60))
+    }
+
+  }
+  else{
+    usr <- secrets(host,credential_label)[1]
+    pwd <- secrets(host, credential_label)[2]
+  }
+
+
+  path = "api/29/me"
+  url <- httr::modify_url("https://api.github.com", path = path, hostname = host)
+
+  resp <- httr::GET(url, authenticate(usr, pwd), timeout(60))
   if (http_type(resp) != "application/json"){
     stop("API did not return json", call. = FALSE)
   }
 
-  if (resp$status_code == 200){
-    msg <- "success!"
-  } else{
-    msg <- "failed!"
-  }
-
+  status_check(resp)
 
   structure(
-    list(content = msg,
-         path = host,
+    list(path = host,
          response = resp
          ),
     class = "login_dhis2"
@@ -48,7 +58,6 @@ login_dhis2 <- function(host,credential_label){
 
 print.login_dhis2 <- function(x, ...){
   cat("[Server: ", x$path,"]\n", sep = " ")
-  cat("Status: ", x$content, sep = "")
   invisible(x)
 }
 
@@ -73,7 +82,7 @@ win_secret <- function(cred_label){
                            '\\DPAPI\\passwords\\',
                            Sys.info()["nodename"],
                            '\\', cred_label, '.txt', sep="")
-  decrypt_dpapi_pw(credential_path)
+  keyringr::decrypt_dpapi_pw(credential_path)
 
 }
 
@@ -84,8 +93,8 @@ secrets <- function(host,cred_label){
     usr <- cred_label
     pwd <- win_secret(cred_label = cred_label)
   }else{
-    usr <- get_kc_account(host, type = "internet")
-    pwd <- decrypt_kc_pw(host, type = "internet")
+    usr <- keyringr::get_kc_account(host, type = "internet")
+    pwd <- keyringr::decrypt_kc_pw(host, type = "internet")
   }
    c(usr,pwd)
 }
