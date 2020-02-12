@@ -2,8 +2,9 @@
 
 export()
 export(api_fields)
+export(api_filter)
+export(api_link)
 export(build_api_link)
-export(create_api_link)
 export(login_dhis2)
 export(parse_api_args)
 export(status_check)
