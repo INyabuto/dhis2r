@@ -1,6 +1,9 @@
-#' Parse DHIS2 API fields
+#' Parse DHIS2 endpoint fields
 #'
-#' This function parse API fields params in standard DHIS2 format.
+#' This function parses DHIS2 endpoint fields into a character string.
+#'
+#' @param ... DHIS2 query parameters.
+#' @return A character string.
 #'
 #' @export
 #' @examples
