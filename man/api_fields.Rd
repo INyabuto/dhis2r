@@ -2,12 +2,18 @@
 % Please edit documentation in R/api_fields.R
 \name{api_fields}
 \alias{api_fields}
-\title{Parse DHIS2 API fields}
+\title{Parse DHIS2 endpoint fields}
 \usage{
 api_fields(...)
 }
+\arguments{
+\item{...}{DHIS2 query parameters.}
+}
+\value{
+A character string.
+}
 \description{
-This function parse API fields params in standard DHIS2 format.
+This function parses DHIS2 endpoint fields into a character string.
 }
 \examples{
 # select all the fields

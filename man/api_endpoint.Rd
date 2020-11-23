@@ -56,7 +56,7 @@ api_endpoint(resource = "dataElements")
 api_endpoint(resource = "dataElements", fields = c("name","id","shortNames"))
 # arrange the data elements name in ascending order
 api_endpoint(resource = "dataElements", fields = c("name","id","shortNames"),
-   order = api_order("name", order_by = "asc"))
+   order = api_order("name", by = "asc"))
 # default resource endpoint
 api_params <- parse_api_params()
 # api params with query object
