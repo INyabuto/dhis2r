@@ -1,4 +1,14 @@
+#' Parse DHIS2 endpoint query
+#'
+#' This function parses DHIS2 endpoint queries into a character string.
+#'
+#' @param ... DHIS2 query parameters.
+#' @return A character string.
+#' @name api_query
 #' @export
+#' @examples
+#' api_query(fields = "name", totalPages = TRUE)
+#' api_query(fields = api_fields("name","id",organisationUnit=c("name")))
 api_query <- function(...){
 
   # parse the query options to a list
@@ -23,7 +33,7 @@ api_query <- function(...){
 
   if (length(fields) > 0){
     stop(
-      sprintf("the following [%s] are not valid DHIS2 object filters, \n did you mean parse them as fields? if so, please parse them using api_fields()", paste0(fields, collapse = ", ")),
+      sprintf("Object(s) [%s] cannot be parsed into the query. \n You can parse them as fields with `api_fields()`", paste0(fields, collapse = ", ")),
       call. = FALSE
     )
   }
@@ -46,5 +56,6 @@ api_query <- function(...){
 
   query
 
-
 }
+
+
