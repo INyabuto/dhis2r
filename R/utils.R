@@ -1,7 +1,8 @@
 api_version <- function(version = 29) if (version %in% 30:28) version else stop("unsupported API version", call. = F)
 
+#' @export
 api_order <- function(x, order_by = c("asc", "iasc", "desc", "idesc")){
-  paste0("order=", x, ":", match.arg(order_by))
+  paste0(x, ":", match.arg(order_by))
 }
 
 
