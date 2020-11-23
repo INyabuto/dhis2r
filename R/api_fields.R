@@ -8,7 +8,7 @@
 #' api_fields("*")
 #' # select only name, id, shortName and code
 #' api_fields("name","id","shortName","code")
-#' # select fields in collection
+#' # select fields in a collection
 #' api_fields("name", organisationUnits = c("name","id","code"))
 api_fields <- function(...){
 
@@ -23,9 +23,9 @@ api_fields <- function(...){
       !nzchar(arg_names)
     }
 
-  collections <- args[!missing]
+  collection <- args[!missing]
 
-  collection_fields <- purrr::map(collections, commas)
+  collection_fields <- purrr::map(collection, commas)
 
   collection_names <- names(collection_fields)
 
@@ -35,10 +35,17 @@ api_fields <- function(...){
     collection_transformed[[i]] <- paste0(collection_names[i], "[", collection_fields[[i]], "]")
   }
 
-  paste(
-    paste0(args[missing], collapse = ","),
-    paste0(collection_transformed, collapse = ","),
-    sep = ","
-  )
+  if (length(collection_transformed) > 0){
+    paste(
+      paste0(args[missing], collapse = ","),
+      paste0(collection_transformed, collapse = ","),
+      sep = ","
+    )
+  } else {
+    paste0(args[missing], collapse = ",")
+  }
+
 
 }
+
+
