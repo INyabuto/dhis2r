@@ -23,7 +23,7 @@
 #' api_endpoint(resource = "dataElements", fields = c("name","id","shortNames"))
 #' # arrange the data elements name in ascending order
 #' api_endpoint(resource = "dataElements", fields = c("name","id","shortNames"),
-#'    order = api_order("name", order_by = "asc"))
+#'    order = api_order("name", by = "asc"))
 api_endpoint <- function(..., resource = "resources", id = NULL, path = NULL, version = NULL){
 
   api_params <- parse_api_params(resource = resource, id = id, path = path, version = version, ...)
