@@ -14,12 +14,13 @@ Imports:
     jsonlite,
     httr,
     keyringr,
-    magrittr
+    magrittr,
+    stringr
 Suggests:
     dplyr,
     plyr,
-    stringr,
-    tidyr
-RoxygenNote: 7.0.2
+    tidyr,
+    testthat
+RoxygenNote: 7.1.1
 URL: https://github.com/INyabuto/dhis2r
 BugReports: https://github.com/INyabuto/dhis2r/issues
