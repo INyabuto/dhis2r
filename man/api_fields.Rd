@@ -14,6 +14,6 @@ This function parse API fields params in standard DHIS2 format.
 api_fields("*")
 # select only name, id, shortName and code
 api_fields("name","id","shortName","code")
-# select fields in collection
+# select fields in a collection
 api_fields("name", organisationUnits = c("name","id","code"))
 }
