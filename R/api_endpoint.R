@@ -1,32 +1,36 @@
-#' Generate DHIS2 API endpoint
+#' Generate a DHIS2 API endpoint link
 #'
-#' This function returns a DHIS2 API endpoint, used for browsing DHIS2 web
-#' resources from R. Useful for constructing, defining, or parsing API
-#' parameters quickly.
-#' @name api_endpoint
+#' Short hand to generate a DHIS2 like API endpoint link from R. This is useful
+#' if you need to define or parse API parameters quickly. By default, the
+#' resources endpoint is returned.
+#'
+#'
+#' @name genarate_api_endpoint
 #'
 #' @param ... Additional parameters parsed to \code{\link{api_query}}.
-#' @param resource A character string, the DHIS2 resource name, example `dataElements`
-#' @param id A character string, the Unique Identifier for this Object.
-#' @param path A character string, specifies a sub directory of the resource.
-#' @param version An integer, the version of DHIS2 web API. The default version is
-#'   current supported version, you can override this using the \code{\link{api_version}} or by
-#'   setting the value explicitly.
+#' @param resource A character string, the DHIS2 resource name, example
+#'   `dataElements`, `dataElementGroups`, e.tc.
+#' @param id A character string, the unique identifier for a specific object in
+#'   the resource.
+#' @param path A character string, specifies a sub directory in the resource.
+#' @param version An integer, the version of DHIS2 web API. The default version
+#'   is `current supported version`, you can override this using the
+#'   \code{\link{api_version}} or by specifying the value explicitly.
 #' @return A string. DHIS2 web API link
 #' @export
 #' @examples
-#' # default api link - the resource endpoint
-#' api_endpoint()
+#' # default api link
+#' generate_api_endpoint()
 #' # navigate to dataElements endpoint
-#' api_endpoint(resource = "dataElements")
+#' generate_api_endpoint(resource = "dataElements")
 #' # select data elements name, id and shortNames
-#' api_endpoint(resource = "dataElements", fields = c("name","id","shortNames"))
+#' generate_api_endpoint(resource = "dataElements", fields = c("name","id","shortNames"))
 #' # arrange the data elements name in ascending order
-#' api_endpoint(resource = "dataElements", fields = c("name","id","shortNames"),
+#' generate_api_endpoint(resource = "dataElements", fields = c("name","id","shortNames"),
 #'    order = api_order("name", by = "asc"))
-api_endpoint <- function(..., resource = "resources", id = NULL, path = NULL, version = NULL){
+generate_api_endpoint <- function(..., resource = "resources", id = NULL, path = NULL, version = NULL){
 
-  api_params <- parse_api_params(resource = resource, id = id, path = path, version = version, ...)
+  api_params <- parse_api_params(..., resource = resource, id = id, path = path, version = version)
 
   build_api_endpoint(api_params)
 
@@ -37,7 +41,7 @@ api_endpoint <- function(..., resource = "resources", id = NULL, path = NULL, ve
 #'
 #' This function parse DHIS2 API endpoint parameters into a list object.
 #'
-#' @rdname api_endpoint
+#' @rdname generate_api_endpoint
 #' @name parse_api_params
 #'
 #' @return An S3 object of class `dhis2_api_params`
