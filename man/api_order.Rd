@@ -23,5 +23,5 @@ api_order("name", by = "desc")
 # example in a query to order by ascending order
 api_query(order = api_order("name", "asc"))
 # order data elements in descending order
-api_endpoint(resource = "dataElements", order = api_order("name", "desc"))
+modify_api_endpoint(endpoint = "dataElements", order = api_order("name", "desc"))
 }
