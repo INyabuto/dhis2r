@@ -15,14 +15,14 @@ api_version <- function(version = 29) {
 
 
 
-#' %>%
-#'
-#' @rdname pipe
-#' @keywords internal
-#' @export
-#' @importFrom magrittr %>%
-#' @usage lhs \%>\% rhs
-NULL
+#' #' %>%
+#' #'
+#' #' @rdname pipe
+#' #' @keywords internal
+#' #' @export
+#' #' @importFrom magrittr %>%
+#' #' @usage lhs \%>\% rhs
+#' NULL
 
 
 # # empty list
@@ -38,7 +38,15 @@ NULL
 #   !is.null(names)
 # }
 
-
+#' Parse arguments separated by commas
+#'
+#' @param ... Arguments to be separated by commas.
+#' @return A comma separated string.
+#' @keywords internal
+#' @noRd
 commas <- function(...) paste0(..., collapse = ",")
+
+
+#list2 <- function(...) eval(substitute(alist(...)))
 
 
