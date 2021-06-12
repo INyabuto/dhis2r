@@ -11,9 +11,9 @@
 #' @param id The unique identifier for an object in the endpoint.
 #' @param ref A reference within the endpoint.
 #' @param ref_id The unique identifier of a referenced object in the endpoint.
-#' @param vers An integer, the vers of DHIS2 web API. The default vers
-#'   is `current supported vers`, you can override this using the
-#'   \code{\link{api_vers}} or by specifying the value explicitly.
+#' @param version An integer, the version of DHIS2 web API. The default version
+#'   is `current supported version`, you can override this using the
+#'   \code{\link{api_version}} or by specifying the value explicitly.
 #' @return A string, the DHIS2 web API link.
 #' @export
 #' @examples
@@ -31,8 +31,8 @@
 #' @export
 
 modify_api_endpoint <- function(endpoint = NULL, ..., id = NULL, ref = NULL, ref_id = NULL,
-                                vers = NULL) {
-  params <- parse_api_params(endpoint = endpoint, ..., id = id, ref = ref, ref_id = ref_id, vers = vers)
+                                version = NULL) {
+  params <- parse_api_params(endpoint = endpoint, ..., id = id, ref = ref, ref_id = ref_id, version = version)
 
   build_api_endpoint(params)
 }
@@ -52,7 +52,7 @@ modify_api_endpoint <- function(endpoint = NULL, ..., id = NULL, ref = NULL, ref
 #' # api params with query object
 #' api_params <- parse_api_params(endpoint = "dataElements", field = c("name", "code", "id"))
 parse_api_params <- function(endpoint = NULL, ..., id = NULL, ref = NULL, ref_id = NULL,
-                             vers = NULL) {
+                             version = NULL) {
   # parse the parameters to an S3 type object
   structure(
     list(
@@ -60,7 +60,7 @@ parse_api_params <- function(endpoint = NULL, ..., id = NULL, ref = NULL, ref_id
       id = id,
       ref = ref,
       ref_id = ref_id,
-      vers = vers,
+      version = version,
       query = api_query(...)
     ),
     class = "api_params"
@@ -79,7 +79,7 @@ parse_api_params <- function(endpoint = NULL, ..., id = NULL, ref = NULL, ref_id
 build_api_endpoint <- function(params) {
 
   api <- "api"
-  vers <- 0
+  version <- 0
 
   # parse api endpoint
   if (!is.null(params$endpoint)) {
@@ -95,20 +95,20 @@ build_api_endpoint <- function(params) {
       # reuse the endpoint parts
       if (length(endpoint_parts) == 3){
         api <- endpoint_parts[1]
-        vers <- endpoint_parts[2]
+        version <- endpoint_parts[2]
         endpoint <- endpoint_parts[3]
       }
 
       if (length(endpoint_parts) == 4){
         api <- endpoint_parts[1]
-        vers <- endpoint_parts[2]
+        version <- endpoint_parts[2]
         endpoint <- endpoint_parts[3]
         id = endpoint_parts[4]
       }
 
       if (length(endpoint_parts) == 5){
         api <- endpoint_parts[1]
-        vers <- endpoint_parts[2]
+        version <- endpoint_parts[2]
         endpoint <- endpoint_parts[3]
         id = endpoint_parts[4]
         ref = endpoint_parts[5]
@@ -116,14 +116,14 @@ build_api_endpoint <- function(params) {
 
       if (length(endpoint_parts) == 6){
         api <- endpoint_parts[1]
-        vers <- endpoint_parts[2]
+        version <- endpoint_parts[2]
         endpoint <- endpoint_parts[3]
         id = endpoint_parts[4]
         ref = endpoint_parts[5]
         ref_id = endpoint_parts[6]
       }
 
-    } else { # endpoint is missing vers
+    } else { # endpoint is missing version
       endpoint_parts <- strsplit(endpoint, "/")
 
       endpoint_parts <- unlist(endpoint_parts)
@@ -182,13 +182,13 @@ build_api_endpoint <- function(params) {
     ref_id <- 0
   }
 
-  # parse the api vers
-  if (!is.null(params$vers)) {
-    vers <- params$vers
+  # parse the api version
+  if (!is.null(params$version)) {
+    version <- params$version
   }
 
   # else {
-  #   vers <- 0
+  #   version <- 0
   # }
 
   # parse the api query
@@ -201,7 +201,7 @@ build_api_endpoint <- function(params) {
   # build link
 
   paste(
-      paste(api, vers, endpoint, id, ref, ref_id, sep = "/"),
+      paste(api, version, endpoint, id, ref, ref_id, sep = "/"),
       query,
       sep = "/"
     ) -> link
