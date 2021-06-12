@@ -11,9 +11,9 @@
 #' @param id The unique identifier for an object in the endpoint.
 #' @param ref A reference within the endpoint.
 #' @param ref_id The unique identifier of a referenced object in the endpoint.
-#' @param version An integer, the version of DHIS2 web API. The default version
-#'   is `current supported version`, you can override this using the
-#'   \code{\link{api_version}} or by specifying the value explicitly.
+#' @param vers An integer, the vers of DHIS2 web API. The default vers
+#'   is `current supported vers`, you can override this using the
+#'   \code{\link{api_vers}} or by specifying the value explicitly.
 #' @return A string, the DHIS2 web API link.
 #' @export
 #' @examples
@@ -28,9 +28,11 @@
 #'   endpoint = "dataElements", fields = c("name", "id", "shortNames"),
 #'   order = api_order("name", by = "asc")
 #' )
-modify_api_endpoint <- function(endpoint, ..., id = NULL, ref = NULL, ref_id = NULL,
-                                version = NULL) {
-  params <- parse_api_params(endpoint, ..., id = id, ref = ref, ref_id = ref_id, version = version)
+#' @export
+
+modify_api_endpoint <- function(endpoint = NULL, ..., id = NULL, ref = NULL, ref_id = NULL,
+                                vers = NULL) {
+  params <- parse_api_params(endpoint = endpoint, ..., id = id, ref = ref, ref_id = ref_id, vers = vers)
 
   build_api_endpoint(params)
 }
@@ -49,8 +51,8 @@ modify_api_endpoint <- function(endpoint, ..., id = NULL, ref = NULL, ref_id = N
 #' api_params <- parse_api_params()
 #' # api params with query object
 #' api_params <- parse_api_params(endpoint = "dataElements", field = c("name", "code", "id"))
-parse_api_params <- function(endpoint, ..., id = NULL, ref = NULL, ref_id = NULL,
-                             version = NULL) {
+parse_api_params <- function(endpoint = NULL, ..., id = NULL, ref = NULL, ref_id = NULL,
+                             vers = NULL) {
   # parse the parameters to an S3 type object
   structure(
     list(
@@ -58,7 +60,7 @@ parse_api_params <- function(endpoint, ..., id = NULL, ref = NULL, ref_id = NULL
       id = id,
       ref = ref,
       ref_id = ref_id,
-      version = version,
+      vers = vers,
       query = api_query(...)
     ),
     class = "api_params"
@@ -76,11 +78,87 @@ parse_api_params <- function(endpoint, ..., id = NULL, ref = NULL, ref_id = NULL
 #' @noRd
 build_api_endpoint <- function(params) {
 
+  api <- "api"
+  vers <- 0
+
   # parse api endpoint
   if (!is.null(params$endpoint)) {
     endpoint <- params$endpoint
+
+    if (grepl("/\\d+/", endpoint)){
+
+      endpoint_parts <- strsplit(endpoint, "/")
+
+      endpoint_parts <- unlist(endpoint_parts)
+
+
+      # reuse the endpoint parts
+      if (length(endpoint_parts) == 3){
+        api <- endpoint_parts[1]
+        vers <- endpoint_parts[2]
+        endpoint <- endpoint_parts[3]
+      }
+
+      if (length(endpoint_parts) == 4){
+        api <- endpoint_parts[1]
+        vers <- endpoint_parts[2]
+        endpoint <- endpoint_parts[3]
+        id = endpoint_parts[4]
+      }
+
+      if (length(endpoint_parts) == 5){
+        api <- endpoint_parts[1]
+        vers <- endpoint_parts[2]
+        endpoint <- endpoint_parts[3]
+        id = endpoint_parts[4]
+        ref = endpoint_parts[5]
+      }
+
+      if (length(endpoint_parts) == 6){
+        api <- endpoint_parts[1]
+        vers <- endpoint_parts[2]
+        endpoint <- endpoint_parts[3]
+        id = endpoint_parts[4]
+        ref = endpoint_parts[5]
+        ref_id = endpoint_parts[6]
+      }
+
+    } else { # endpoint is missing vers
+      endpoint_parts <- strsplit(endpoint, "/")
+
+      endpoint_parts <- unlist(endpoint_parts)
+
+
+      # reuse the endpoint parts
+      if (length(endpoint_parts) == 2){
+        api <- endpoint_parts[1]
+        endpoint <- endpoint_parts[2]
+      }
+
+      if (length(endpoint_parts) == 3){
+        api <- endpoint_parts[1]
+        endpoint <- endpoint_parts[2]
+        id = endpoint_parts[3]
+      }
+
+      if (length(endpoint_parts) == 4){
+        api <- endpoint_parts[1]
+        endpoint <- endpoint_parts[2]
+        id <- endpoint_parts[3]
+        ref <- endpoint_parts[4]
+      }
+
+      if (length(endpoint_parts) == 5){
+        api <- endpoint_parts[1]
+        endpoint <- endpoint_parts[2]
+        id <- endpoint_parts[3]
+        ref <- endpoint_parts[4]
+        ref_id <- endpoint_parts[5]
+      }
+    }
+
   } else {
-    endpoint <- "endpoints"
+    endpoint <- "resources"
   }
 
   # parse endpoint id
@@ -104,12 +182,14 @@ build_api_endpoint <- function(params) {
     ref_id <- 0
   }
 
-  # parse the api version
-  if (!is.null(params$version)) {
-    version <- params$version
-  } else {
-    version <- api_version()
+  # parse the api vers
+  if (!is.null(params$vers)) {
+    vers <- params$vers
   }
+
+  # else {
+  #   vers <- 0
+  # }
 
   # parse the api query
   if (!is.null(params$query)) {
@@ -118,14 +198,27 @@ build_api_endpoint <- function(params) {
     query <- 0
   }
 
+  # build link
+
   paste(
-    paste("api", version, endpoint, id, ref, ref_id, sep = "/"),
-    query,
-    sep = "/"
-  ) -> link
+      paste(api, vers, endpoint, id, ref, ref_id, sep = "/"),
+      query,
+      sep = "/"
+    ) -> link
+
+  # } else {
+  #   paste(
+  #     paste(api, endpoint, id, ref, ref_id, sep = "/"),
+  #     query,
+  #     sep = "/"
+  #   ) -> link
+  # }
+
+
 
   # clean and return encoded url
   cleaned_link <- str_remove_all(link, "/0")
 
   return(URLencode(cleaned_link))
 }
+
