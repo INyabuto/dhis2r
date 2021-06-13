@@ -1,3 +1,53 @@
+#' Authenticate a User Account to DHIS2
+#'
+#' Authenticate an account to a DHIS2 instance.
+#'
+#' \code{dhis_auth} supplies an account credentials to a DHIS2 instance for
+#' authentication. It returns an S3 object with current information of the
+#' account.
+#'
+#' @param url Server url, character string.
+#' @param username DHIS2 username or Account name, character string.
+#' @param password Password of the DHIS2 account, character string.
+#'
+#' @return An S3 object with the current user information.
+#' @importFrom httr GET content timeout http_type
+#' @importFrom jsonlite fromJSON
+
+
+basic_auth <- function(url = NULL, username = NULL, password = NULL){
+
+  if (any(is.null(url), is.null(username), is.null(password))){
+    stop("please specify the server url and account credentials", call. = F)
+  }
+
+
+  # ...
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #' #'Login to a DHIS2 instance
 #' #'
 #' #'\code{login_dhis2} authenticates the user to a DHIS2 server.
